@@ -1,0 +1,9 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+reset_password:
+    path: /reset-password
+    controller: App\Controller\SecurityController::resetPassword

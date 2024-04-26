@@ -1,0 +1,24 @@
+.correct{
+  color: green;
+}
+
+.incorrect{
+  color: red;
+}
+
+.acceuil{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("/public/images/acceuilDevSecur.jpg"); /* Chemin de l'image de fond */
+  background-size: cover; /* Ajuster l'image pour couvrir toute la div */
+  background-position: center; /* Centrer l'image horizontalement */
+  height: 100vh; /* Hauteur maximale de 100% de la hauteur de l'écran */
+  color: white;
+  text-shadow: #000000 2px 2px 2px;
+  img{
+    height: 300px;
+  }
+
+}

@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <section class="row">
+            <div class="col-12 text-center mb-4">
+                <h1>CHAT-ROOM-VMB</h1>
+            </div>
+            <div class="justify-content-center">
+                <h2>Salon de discussion</h2>
+                <div id="messages">
+                    {% for message in messages %}
+                        <div>{{ message.text|raw }}</div>
+                        <small>Par {{ message.customer.firstName }}</small>
+                        <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        <section class="row justify-content-center">
+            <div class="col-md-6">
+                {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form.title, 'Titre') }}
+                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_label(form.text, 'Message') }}
+                    {{ form_widget(form.text, {'attr': {'class': 'form-control summernote'}}) }}
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-chat-left-dots"> Envoie</i></button>
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 300,
+            });
+        });
+    </script>
+{% endblock %}
