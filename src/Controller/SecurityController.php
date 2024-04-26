@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ResetPasswordFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,15 +39,18 @@ class SecurityController extends AbstractController
     }
 
     #[Route("/reset-password", name:"app_reset-password")]
-    public function resetPassword(Request $request): Response
+    public function resetPassword(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(ResetPasswordFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupérer l'email saisi par l'utilisateur
-            $email = $form->get('email')->getData();
-            // Envoyer l'email de réinitialisation de mot de passe ici
+            $userName = $form->get('nom')->getData();
+
+            // Injection SQL intentionnelle
+            $sql = "SELECT * FROM [user] WHERE first_name = '" . $userName . "'";
+            $user = $em->getConnection()->executeQuery($sql)->fetchAllAssociative();
 
             // Ajouter un message flash pour informer l'utilisateur que l'email de réinitialisation a été envoyé
             $this->addFlash('success', 'Un email de réinitialisation de mot de passe a été envoyé à votre adresse email.');
@@ -56,6 +61,7 @@ class SecurityController extends AbstractController
 
         return $this->render('security/reset_password.html.twig', [
             'form' => $form->createView(),
+            'users' => $em->getRepository(User::class)->findAll()
         ]);
     }
 
