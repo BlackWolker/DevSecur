@@ -45,29 +45,31 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer l'email saisi par l'utilisateur
+
             $userName = $form->get('nom')->getData();
 
-            // Injection SQL intentionnelle
+
             $sql = "SELECT * FROM [user] WHERE first_name = '" . $userName . "'";
             $user = $em->getConnection()->executeQuery($sql)->fetchAllAssociative();
 
-            // Ajouter un message flash pour informer l'utilisateur que l'email de réinitialisation a été envoyé
+
             $this->addFlash('success', 'Un email de réinitialisation de mot de passe a été envoyé à votre adresse email.');
 
-            // Rediriger vers une page de confirmation ou la page d'accueil
+
             return $this->redirectToRoute('app_reset-password-confirmation');
         }
 
         return $this->render('security/reset_password.html.twig', [
             'form' => $form->createView(),
-            'users' => $em->getRepository(User::class)->findAll()
         ]);
     }
 
     #[Route("/reset-password/confirmation", name:"app_reset-password-confirmation")]
-    public function resetPasswordConfirmation(): Response
+    public function resetPasswordConfirmation(EntityManagerInterface $em): Response
     {
-        return $this->render('security/reset-password-confirmation.html.twig');
+        return $this->render('security/reset-password-confirmation.html.twig', [
+            'users' => $em->getRepository(User::class)->findAll()
+        ]);
+
     }
 }
